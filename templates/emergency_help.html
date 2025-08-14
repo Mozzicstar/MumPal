@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}Emergency Help{% endblock %}
+
+{% block content %}
+<div class="emergency-alert">
+    <h3>⚠️ For Life-Threatening Emergencies</h3>
+    <h2>📞 Call 112 Immediately</h2>
+    <p>Don't hesitate - your life and your baby's life are precious</p>
+</div>
+
+<div class="grid grid-2">
+    <div>
+        <div class="card">
+            <h3>🚨 Emergency Contacts</h3>
+            
+            <div class="emergency-contact">
+                <strong>🚑 Emergency Services</strong><br>
+                <span class="emergency-number">112</span>
+            </div>
+            
+            <div class="emergency-contact">
+                <strong>🏥 Ambulance</strong><br>
+                <span class="emergency-number">999</span>
+            </div>
+            
+            <div class="emergency-contact">
+                <strong>👮‍♂️ Police</strong><br>
+                <span class="emergency-number">199</span>
+            </div>
+            
+            <div class="emergency-contact">
+                <strong>🔥 Fire Service</strong><br>
+                <span class="emergency-number">198</span>
+            </div>
+            
+            <div class="emergency-contact">
+                <strong>🏥 Poison Control</strong><br>
+                <span class="emergency-number">Contact local hospital</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>🚨 Quick Actions</h3>
+            
+            <button class="btn btn-danger btn-full mb-2" onclick="sendEmergencyAlert()">
+                📱 Send Emergency Alert
+            </button>
+            
+            <button class="btn btn-full" onclick="findNearestHospital()">
+                📍 Find Nearest Hospital
+            </button>
+            
+            <div id="emergencyAlertResult" style="margin-top: 1rem;"></div>
+            <div id="hospitalResult" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="card">
+            <h3>⚠️ When to Seek Emergency Help</h3>
+            
+            <h4>🤰 During Pregnancy</h4>
+            <ul style="color: #dc3545;">
+                <li>🔴 Severe abdominal pain</li>
+                <li>🔴 Heavy bleeding</li>
+                <li>🔴 Severe headache with vision changes</li>
+                <li>🔴 Difficulty breathing</li>
+                <li>🔴 Severe vomiting (can't keep fluids down)</li>
+                <li>🔴 High fever (over 38°C/100.4°F)</li>
+                <li>🔴 Decreased fetal movement</li>
+                <li>🔴 Leaking amniotic fluid</li>
+                <li>🔴 Severe swelling of face and hands</li>
+            </ul>
+            
+            <h4>🤱 After Birth (Postpartum)</h4>
+            <ul style="color: #dc3545;">
+                <li>🔴 Heavy bleeding (soaking a pad per hour)</li>
+                <li>🔴 Severe headache</li>
+                <li>🔴 Difficulty breathing</li>
+                <li>🔴 Chest pain</li>
+                <li>🔴 Severe abdominal pain</li>
+                <li>🔴 Signs of infection (fever, chills)</li>
+                <li>🔴 Thoughts of self-harm</li>
+                <li>🔴 Severe mood changes</li>
+            </ul>
+            
+            <h4>👶 Baby Emergencies</h4>
+            <ul style="color: #dc3545;">
+                <li>🔴 Difficulty breathing</li>
+                <li>🔴 Blue lips or face</li>
+                <li>🔴 High fever in newborn</li>
+                <li>🔴 Not waking up or very lethargic</li>
+                <li>🔴 Persistent crying (over 3 hours)</li>
+                <li>🔴 Not feeding</li>
+                <li>🔴 Severe vomiting</li>
+                <li>🔴 Signs of dehydration</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>🏥 Local Healthcare Facilities</h3>
+    
+    <div class="grid grid-3">
+        <div class="card" style="background-color: #d1ecf1; border-left: 4px solid #17a2b8;">
+            <h4>🏥 MamaCare Center</h4>
+            <p><strong>📍 Address:</strong> Ring Road, Ibadan, Nigeria</p>
+            <p><strong>📞 Phone:</strong> +234-802-xxx-xxxx</p>
+            <p><strong>🩺 Services:</strong> 24/7 Maternity, Emergency Care</p>
+            <p><strong>🚗 Distance:</strong> 2.3 km</p>
+        </div>
+        
+        <div class="card" style="background-color: #d1ecf1; border-left: 4px solid #17a2b8;">
+            <h4>🏥 University College Hospital</h4>
+            <p><strong>📍 Address:</strong> Queen Elizabeth Road, Ibadan</p>
+            <p><strong>📞 Phone:</strong> +234-803-xxx-xxxx</p>
+            <p><strong>🩺 Services:</strong> Full Hospital, Specialist Care</p>
+            <p><strong>🚗 Distance:</strong> 4.1 km</p>
+        </div>
+        
+        <div class="card" style="background-color: #d1ecf1; border-left: 4px solid #17a2b8;">
+            <h4>🏥 Adeoyo Maternity Hospital</h4>
+            <p><strong>📍 Address:</strong> Yemetu, Ibadan</p>
+            <p><strong>📞 Phone:</strong> +234-805-xxx-xxxx</p>
+            <p><strong>🩺 Services:</strong> Maternity Specialist</p>
+            <p><strong>🚗 Distance:</strong> 3.7 km</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>🎒 Emergency Preparedness</h3>
+    
+    <div class="grid grid-2">
+        <div>
+            <h4>📋 Emergency Information Card</h4>
+            <p>Keep this information easily accessible:</p>
+            <ul>
+                <li>Your name and emergency contact</li>
+                <li>Blood type and allergies</li>
+                <li>Current medications</li>
+                <li>Due date (if pregnant)</li>
+                <li>Healthcare provider contact</li>
+                <li>Insurance information</li>
+            </ul>
+        </div>
+        
+        <div>
+            <h4>🏥 Hospital Bag Checklist</h4>
+            <p>Keep a bag ready with:</p>
+            <ul>
+                <li>ID and insurance cards</li>
+                <li>Comfortable clothes</li>
+                <li>Phone charger</li>
+                <li>Snacks and water</li>
+                <li>Baby clothes and diapers</li>
+                <li>Any required medications</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+function sendEmergencyAlert() {
+    const resultDiv = document.getElementById('emergencyAlertResult');
+    resultDiv.innerHTML = `
+        <div class="alert alert-success">
+            <p><strong>🚨 Emergency alert sent to your emergency contacts!</strong></p>
+            <p>📲 Alert includes your location and medical information</p>
+        </div>
+    `;
+}
+
+function findNearestHospital() {
+    const resultDiv = document.getElementById('hospitalResult');
+    resultDiv.innerHTML = `
+        <div class="alert alert-info">
+            <p>🗺️ Locating nearest maternal health facility...</p>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        resultDiv.innerHTML = `
+            <div class="alert alert-success">
+                <h5>🏥 MamaCare Center - 2.3 km away</h5>
+                <p>📍 Ring Road, Ibadan<br>
+                ☎️ +234-xxx-xxxx</p>
+            </div>
+        `;
+    }, 2000);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Ask HelpMumPal - AI Assistant{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🤖 Ask HelpMumPal</h1>
+    <p><em>Get personalized health guidance from our AI assistant</em></p>
+</div>
+
+<div class="grid grid-2">
+    <div>
+        <div class="chat-container">
+            {% if chat_history %}
+                {% for chat in chat_history %}
+                    <div class="chat-message chat-user">
+                        <strong>You:</strong><br>
+                        {{ chat.question }}
+                    </div>
+                    <div class="chat-message chat-assistant">
+                        <strong>HelpMumPal:</strong><br>
+                        {{ chat.answer|replace('\n', '<br>')|safe }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center" style="padding: 2rem; color: #6c757d;">
+                    <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Start a conversation! Ask me anything about your health, pregnancy, or baby care.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <form method="POST" action="{{ url_for('ask_ai') }}" class="chat-input">
+            <input type="text" name="question" placeholder="Ask me anything about your health, pregnancy, or baby care..." class="form-control" required>
+            <button type="submit" class="btn">Send</button>
+        </form>
+    </div>
+    
+    <div>
+        <div class="card">
+            <h4>💡 Common Questions</h4>
+            <div style="margin-top: 1rem;">
+                <form method="POST" action="{{ url_for('ask_ai') }}" style="display: inline;">
+                    <input type="hidden" name="question" value="I'm experiencing morning sickness, what should I do?">
+                    <button type="submit" class="btn" style="margin: 0.25rem;">🤢 Morning Sickness Help</button>
+                </form>
+                
+                <form method="POST" action="{{ url_for('ask_ai') }}" style="display: inline;">
+                    <input type="hidden" name="question" value="How often should I feed my baby?">
+                    <button type="submit" class="btn" style="margin: 0.25rem;">🍼 Baby Feeding Guide</button>
+                </form>
+                
+                <form method="POST" action="{{ url_for('ask_ai') }}" style="display: inline;">
+                    <input type="hidden" name="question" value="I'm not getting enough sleep with my newborn">
+                    <button type="submit" class="btn" style="margin: 0.25rem;">😴 Sleep & Rest Tips</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

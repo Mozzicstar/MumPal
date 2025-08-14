@@ -1,0 +1,118 @@
+import streamlit as st
+
+# Page configuration
+st.set_page_config(page_title="HelpMumPal", layout="wide")
+
+# Sidebar Navigation
+st.sidebar.title("HelpMumPal")
+page = st.sidebar.radio("Go to", [
+    "🏠 Home",
+    "🤖 Ask HelpMumPal",
+    "👶 Baby & Pregnancy Tracker",
+    "🍲 Nutrition Guide",
+    "📊 Health Tracker",
+    "⏰ Smart Reminders",
+    "🚨 Emergency Help",
+    "🧠 Mental Health Support",
+    "📚 Health Resources",
+    "❤️ About"
+])
+
+# Home Page
+if page == "🏠 Home":
+    st.title("Welcome to HelpMumPal")
+    st.subheader("Your 24/7 Maternal Health Companion")
+    st.write("AI-powered support for pregnant women and new mothers. Get answers, track your journey, and stay healthy — together.")
+
+# AI Assistant Page
+elif page == "🤖 Ask HelpMumPal":
+    st.title("Ask HelpMumPal")
+    st.write("Ask anything related to your health, baby, or well-being.")
+    question = st.text_input("🤔 What's your question?")
+    if question:
+        st.info("🔍 AI is thinking...")
+        st.success(f"📘 Sample Answer: Based on your question '{question}', it is recommended to get some rest, drink water, and contact a doctor if symptoms persist.")
+
+# Baby & Pregnancy Tracker
+elif page == "👶 Baby & Pregnancy Tracker":
+    st.title("Baby & Pregnancy Tracker")
+    mode = st.radio("Choose your mode:", ["Pregnancy", "Baby"])
+    if mode == "Pregnancy":
+        st.write("You are currently in **Week 28** of your pregnancy.")
+        st.success("👶 Baby is the size of an eggplant!")
+    else:
+        st.write("Your baby is **3 months old**.")
+        st.success("🎉 Milestone: Smiling and following objects!")
+
+# Nutrition Guide
+elif page == "🍲 Nutrition Guide":
+    st.title("Nutrition & Meal Guide")
+    st.write("Eat right for your stage — whether pregnant or nursing.")
+    st.markdown("""
+    - 🥬 Leafy greens: Iron and folate  
+    - 🥛 Milk & yogurt: Calcium and protein  
+    - 🥭 Fruits: Fiber and vitamins  
+    - 🐟 Fish: Omega-3 for brain development  
+    """)
+
+# Health Tracker
+elif page == "📊 Health Tracker":
+    st.title("Daily Health Tracker")
+    st.write("Log your current health data and mood.")
+    temp = st.number_input("Body Temperature (°C)", 35.0, 42.0, step=0.1)
+    weight = st.number_input("Current Weight (kg)", 30.0, 150.0, step=0.5)
+    mood = st.selectbox("How are you feeling today?", ["😊 Good", "😐 Okay", "😣 Stressed", "😴 Tired"])
+    if st.button("Log Entry"):
+        st.success(f"Logged: Temp {temp}°C | Weight {weight}kg | Mood: {mood}")
+
+# Smart Reminders
+elif page == "⏰ Smart Reminders":
+    st.title("Smart Reminders")
+    st.write("Set reminders for important events.")
+    task = st.text_input("Reminder Title (e.g. Antenatal Visit)")
+    time = st.time_input("Reminder Time")
+    date = st.date_input("Reminder Date")
+    if st.button("Set Reminder"):
+        st.success(f"Reminder set for '{task}' on {date} at {time}")
+
+# Emergency Help
+elif page == "🚨 Emergency Help":
+    st.title("Emergency Help")
+    st.warning("For urgent needs, please act quickly.")
+    st.markdown("""
+    - 📞 Call local emergency number: **112**  
+    - 🏥 Nearest clinic: *MamaCare Center, Ibadan*  
+    """)
+    if st.button("🚨 Alert Emergency Contact"):
+        st.success("📲 Emergency alert sent!")
+
+# Mental Health
+elif page == "🧠 Mental Health Support":
+    st.title("Mental Health & Postpartum Support")
+    st.write("Taking care of your mind is just as important.")
+    st.markdown("""
+    - 🧘🏾 Breathe in and out deeply  
+    - 💬 Journaling or voice notes  
+    - 🤝 Talk to a friend or counselor  
+    - 🌸 You are not alone.  
+    """)
+
+# Health Resources
+elif page == "📚 Health Resources":
+    st.title("Trusted Health Resources")
+    st.markdown("""
+    - [CDC: Maternal Health](https://www.cdc.gov/reproductivehealth/maternalinfanthealth/)
+    - [WHO: Pregnancy Guidelines](https://www.who.int/health-topics/maternal-health)
+    - [Postpartum Support International](https://www.postpartum.net/)
+    """)
+
+# About Page
+elif page == "❤️ About":
+    st.title("About HelpMumPal")
+    st.markdown("""
+    **HelpMumPal** is a virtual maternal care assistant built for African mothers.  
+    - 🧠 AI-driven health guidance  
+    - 📲 Lightweight and accessible  
+    - ❤️ Built with care for communities  
+    """)
+

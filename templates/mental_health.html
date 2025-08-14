@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Mental Health Support{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🧠 Mental Health & Postpartum Support</h1>
+    <p><em>Your emotional well-being matters just as much as your physical health</em></p>
+</div>
+
+<div class="card">
+    <h3>💭 How Are You Feeling Today?</h3>
+    
+    <form method="POST" action="{{ url_for('mental_health') }}" id="moodCheckForm">
+        <div class="form-group">
+            <label>Select how you're feeling:</label>
+            <select name="mood_check" class="form-control" onchange="updateMoodResponse()">
+                <option value="😊 Great - feeling positive and energetic">😊 Great - feeling positive and energetic</option>
+                <option value="🙂 Good - generally doing well">🙂 Good - generally doing well</option>
+                <option value="😐 Okay - some ups and downs">😐 Okay - some ups and downs</option>
+                <option value="😔 Low - feeling sad or down">😔 Low - feeling sad or down</option>
+                <option value="😰 Anxious - worried or stressed">😰 Anxious - worried or stressed</option>
+                <option value="😴 Exhausted - very tired">😴 Exhausted - very tired</option>
+                <option value="😢 Overwhelmed - struggling to cope">😢 Overwhelmed - struggling to cope</option>
+            </select>
+        </div>
+        
+        <div id="moodResponse"></div>
+    </form>
+</div>
+
+<div class="grid grid-2">
+    <div>
+        <div class="card">
+            <h3>🌸 Self-Care Techniques</h3>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTechnique('breathing')">🧘‍♀️ Breathing</button>
+                <button class="tab" onclick="showTechnique('relaxation')">💆‍♀️ Relaxation</button>
+                <button class="tab" onclick="showTechnique('journaling')">📝 Journaling</button>
+            </div>
+            
+            <div id="breathingTechnique" class="tab-content active">
+                <h4>🫁 Breathing Exercise</h4>
+                <p><strong>4-7-8 Breathing Technique:</strong></p>
+                <ol>
+                    <li>Inhale through nose for 4 counts</li>
+                    <li>Hold breath for 7 counts</li>
+                    <li>Exhale through mouth for 8 counts</li>
+                    <li>Repeat 3-4 times</li>
+                </ol>
+                <p><em>This helps reduce anxiety and promote calm</em></p>
+                
+                <button class="btn" onclick="startBreathingExercise()">🎵 Start Guided Breathing</button>
+                <div id="breathingGuide" style="margin-top: 1rem;"></div>
+            </div>
+            
+            <div id="relaxationTechnique" class="tab-content">
+                <h4>🌊 Progressive Muscle Relaxation</h4>
+                <p><strong>5-Minute Relaxation:</strong></p>
+                <ol>
+                    <li>Start with your toes - tense for 5 seconds, then relax</li>
+                    <li>Move up to calves, thighs, abdomen</li>
+                    <li>Tense and relax shoulders, arms, hands</li>
+                    <li>Finally, facial muscles</li>
+                    <li>Take deep breaths throughout</li>
+                </ol>
+                <p><em>Helps release physical tension and stress</em></p>
+            </div>
+            
+            <div id="journalingTechnique" class="tab-content">
+                <h4>📖 Emotional Journaling</h4>
+                
+                <form method="POST" action="{{ url_for('save_journal') }}">
+                    <div class="form-group">
+                        <label>Write about your feelings today:</label>
+                        <textarea name="journal_entry" class="form-control" rows="6" 
+                                  placeholder="Express your thoughts, worries, hopes, or gratitude..."></textarea>
+                    </div>
+                    
+                    <input type="hidden" name="mood_check" id="hiddenMoodCheck">
+                    <button type="submit" class="btn btn-primary">💾 Save Journal Entry</button>
+                </form>
+                
+                {% if journal_entries %}
+                    <div style="margin-top: 2rem;">
+                        <h5>📚 Recent Journal Entries</h5>
+                        {% for entry in journal_entries[-3:] %}
+                            <div class="card" style="margin: 1rem 0; padding: 1rem; background-color: #f8f9fa;">
+                                <p><strong>📅 {{ entry.date }}</strong> - {{ entry.mood }}</p>
+                                <p>{{ entry.entry }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="card">
+            <h3>🤝 Support Resources</h3>
+            
+            <div class="alert alert-warning">
+                <h4>⚠️ When to Seek Help</h4>
+                <p><strong>Contact a healthcare provider if you experience:</strong></p>
+                <ul>
+                    <li>Persistent sadness lasting more than 2 weeks</li>
+                    <li>Loss of interest in activities you used to enjoy</li>
+                    <li>Difficulty bonding with your baby</li>
+                    <li>Extreme mood swings</li>
+                    <li>Thoughts of harming yourself or your baby</li>
+                    <li>Panic attacks or severe anxiety</li>
+                    <li>Difficulty sleeping when baby is sleeping</li>
+                    <li>Feeling like you're not a good mother</li>
+                </ul>
+            </div>
+            
+            <h4>📞 Professional Support</h4>
+            
+            <div style="background-color: #e7f3ff; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+                <strong>🩺 Primary Healthcare Provider</strong><br>
+                <small>Your doctor or midwife</small>
+            </div>
+            
+            <div style="background-color: #e7f3ff; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+                <strong>🧠 Mental Health Counselor</strong><br>
+                <small>Specialized in maternal mental health</small>
+            </div>
+            
+            <div style="background-color: #e7f3ff; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+                <strong>📱 Crisis Hotline</strong><br>
+                <small>24/7 support - Call 112</small>
+            </div>
+            
+            <div style="background-color: #e7f3ff; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+                <strong>👥 Support Groups</strong><br>
+                <small>Connect with other mothers</small>
+            </div>
+            
+            <div style="background-color: #e7f3ff; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+                <strong>💊 Psychiatric Care</strong><br>
+                <small>If medication is needed</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>💪 Daily Encouragement</h3>
+    
+    <div class="text-center">
+        <button class="btn btn-primary" onclick="getAffirmation()">🌟 Get Daily Affirmation</button>
+        <div id="affirmationResult" style="margin-top: 1rem;"></div>
+    </div>
+</div>
+
+<script>
+function updateMoodResponse() {
+    const moodSelect = document.querySelector('select[name="mood_check"]');
+    const hiddenInput = document.getElementById('hiddenMoodCheck');
+    const responseDiv = document.getElementById('moodResponse');
+    
+    hiddenInput.value = moodSelect.value;
+    
+    const selectedMood = moodSelect.value;
+    if (selectedMood.includes('Low') || selectedMood.includes('Anxious') || selectedMood.includes('Overwhelmed')) {
+        responseDiv.innerHTML = '<div class="alert alert-warning">💙 It\'s okay to not feel okay. You\'re not alone, and help is available.</div>';
+    } else {
+        responseDiv.innerHTML = '';
+    }
+}
+
+function showTechnique(technique) {
+    // Hide all technique contents
+    const techniques = ['breathing', 'relaxation', 'journaling'];
+    techniques.forEach(t => {
+        document.getElementById(t + 'Technique').classList.remove('active');
+    });
+    
+    // Remove active class from all tabs
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Show selected technique
+    document.getElementById(technique + 'Technique').classList.add('active');
+    event.target.classList.add('active');
+}
+
+function startBreathingExercise() {
+    const guideDiv = document.getElementById('breathingGuide');
+    guideDiv.innerHTML = '<div class="alert alert-info">🧘‍♀️ Follow along: Breathe in... 1, 2, 3, 4... Hold... 1, 2, 3, 4, 5, 6, 7... Breathe out... 1, 2, 3, 4, 5, 6, 7, 8...</div>';
+}
+
+function getAffirmation() {
+    fetch('{{ url_for("get_affirmation") }}')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('affirmationResult').innerHTML = 
+                '<div class="alert alert-success">💙 ' + data.affirmation + '</div>';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('affirmationResult').innerHTML = 
+                '<div class="alert alert-success">💙 You are doing an amazing job, even when it doesn\'t feel like it</div>';
+        });
+}
+
+// Initialize mood check
+updateMoodResponse();
+</script>
+{% endblock %}

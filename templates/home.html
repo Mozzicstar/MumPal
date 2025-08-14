@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🤱 Welcome to HelpMumPal</h1>
+    <h3>Your 24/7 Maternal Health Companion</h3>
+    <p>AI-powered support for pregnant women and new mothers across Africa</p>
+</div>
+
+<div class="grid grid-3">
+    <div class="card">
+        <h4>🤖 AI Health Assistant</h4>
+        <p>Get instant answers to your health questions from our AI-powered assistant trained on maternal health data.</p>
+    </div>
+    
+    <div class="card">
+        <h4>📊 Health Tracking</h4>
+        <p>Monitor your vital signs, weight, mood, and overall well-being throughout your journey.</p>
+    </div>
+    
+    <div class="card">
+        <h4>🚨 Emergency Support</h4>
+        <p>Quick access to emergency contacts and local healthcare facilities when you need help most.</p>
+    </div>
+</div>
+
+<section style="margin-top: 3rem;">
+    <h2>🌟 Quick Actions</h2>
+    <div class="grid grid-4">
+        <a href="{{ url_for('ai_assistant') }}" class="btn btn-full">💬 Ask a Question</a>
+        <a href="{{ url_for('health_tracker') }}" class="btn btn-full">📝 Log Health Data</a>
+        <a href="{{ url_for('reminders') }}" class="btn btn-full">⏰ Set Reminder</a>
+        <a href="{{ url_for('emergency_help') }}" class="btn btn-danger btn-full">🚨 Emergency</a>
+    </div>
+</section>
+{% endblock %}

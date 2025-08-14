@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Reminders{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>⏰ Smart Reminders</h1>
+    <p><em>Never miss important appointments and health tasks</em></p>
+</div>
+
+<div class="tabs">
+    <button class="tab active" onclick="showTab('add')">➕ Add Reminder</button>
+    <button class="tab" onclick="showTab('list')">📋 My Reminders</button>
+</div>
+
+<div id="addTab" class="tab-content active">
+    <div class="card">
+        <h3>➕ Set New Reminder</h3>
+        
+        <form method="POST" action="{{ url_for('add_reminder') }}">
+            <div class="grid grid-2">
+                <div>
+                    <div class="form-group">
+                        <label>Reminder Type</label>
+                        <select name="reminder_type" class="form-control">
+                            <option value="🏥 Doctor Appointment">🏥 Doctor Appointment</option>
+                            <option value="💊 Medication">💊 Medication</option>
+                            <option value="🩸 Lab Test">🩸 Lab Test</option>
+                            <option value="💉 Vaccination">💉 Vaccination</option>
+                            <option value="🤱 Feeding Time">🤱 Feeding Time</option>
+                            <option value="🏃‍♀️ Exercise">🏃‍♀️ Exercise</option>
+                            <option value="📊 Health Check">📊 Health Check</option>
+                            <option value="📝 Other">📝 Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Reminder Title</label>
+                        <input type="text" name="title" class="form-control" placeholder="e.g., Prenatal checkup with Dr. Smith" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="reminder_date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" name="reminder_time" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Frequency</label>
+                        <select name="frequency" class="form-control">
+                            <option value="Once">Once</option>
+                            <option value="Daily">Daily</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Monthly">Monthly</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Additional Details</label>
+                <textarea name="description" class="form-control" rows="3" placeholder="Location, preparation notes, etc."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Priority Level</label>
+                <select name="priority" class="form-control">
+                    <option value="🔴 High">🔴 High</option>
+                    <option value="🟡 Medium">🟡 Medium</option>
+                    <option value="🟢 Low">🟢 Low</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">⏰ Set Reminder</button>
+        </form>
+        
+        <div style="margin-top: 2rem;">
+            <h4>🚀 Quick Templates</h4>
+            <div class="grid grid-3">
+                <button class="btn" onclick="fillTemplate('prenatal')">🏥 Prenatal Checkup</button>
+                <button class="btn" onclick="fillTemplate('vaccination')">💉 Baby Vaccination</button>
+                <button class="btn" onclick="fillTemplate('vitamins')">💊 Prenatal Vitamins</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="listTab" class="tab-content">
+    <div class="card">
+        <h3>📋 Your Reminders</h3>
+        
+        {% if reminders %}
+            <div class="grid grid-2 mb-3">
+                <div class="form-group">
+                    <label>Filter by Status</label>
+                    <select id="statusFilter" class="form-control" onchange="filterReminders()">
+                        <option value="All">All</option>
+                        <option value="Active">Active</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Missed">Missed</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Filter by Priority</label>
+                    <select id="priorityFilter" class="form-control" onchange="filterReminders()">
+                        <option value="All">All</option>
+                        <option value="🔴 High">🔴 High</option>
+                        <option value="🟡 Medium">🟡 Medium</option>
+                        <option value="🟢 Low">🟢 Low</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="remindersList">
+                {% for reminder in reminders %}
+                    <div class="card reminder-item" 
+                         data-status="{{ reminder.status }}" 
+                         data-priority="{{ reminder.priority }}"
+                         style="border-left: 4px solid {% if reminder.priority == '🔴 High' %}orange{% elif reminder.status == 'Completed' %}green{% else %}gray{% endif %};">
+                        
+                        <h4>{{ reminder.type }}: {{ reminder.title }}</h4>
+                        <p><strong>📅 Date:</strong> {{ reminder.date }} at {{ reminder.time }}</p>
+                        <p><strong>🔄 Frequency:</strong> {{ reminder.frequency }}</p>
+                        <p><strong>⚡ Priority:</strong> {{ reminder.priority }}</p>
+                        
+                        {% if reminder.description %}
+                            <p><strong>📝 Details:</strong> {{ reminder.description }}</p>
+                        {% endif %}
+                        
+                        <p><strong>📊 Status:</strong> {{ reminder.status }}</p>
+                        
+                        <div class="grid grid-3" style="margin-top: 1rem;">
+                            {% if reminder.status == 'Active' %}
+                                <form method="POST" action="{{ url_for('reminders') }}" style="display: inline;">
+                                    <input type="hidden" name="action" value="complete">
+                                    <input type="hidden" name="reminder_id" value="{{ reminder.id }}">
+                                    <button type="submit" class="btn btn-success">✅ Complete</button>
+                                </form>
+                            {% endif %}
+                            <button class="btn" onclick="editReminder({{ reminder.id }})">📝 Edit</button>
+                            <button class="btn btn-danger" onclick="deleteReminder({{ reminder.id }})">🗑️ Delete</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                📝 No reminders set yet. Create your first reminder above!
+            </div>
+        {% endif %}
+    </div>
+    
+    {% if reminders %}
+        <div class="card">
+            <h3>📅 Upcoming This Week</h3>
+            
+            <div id="upcomingReminders">
+                <!-- Upcoming reminders will be populated by JavaScript -->
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function fillTemplate(type) {
+    const titleInput = document.querySelector('input[name="title"]');
+    const typeSelect = document.querySelector('select[name="reminder_type"]');
+    const prioritySelect = document.querySelector('select[name="priority"]');
+    
+    if (type === 'prenatal') {
+        titleInput.value = 'Prenatal Checkup';
+        typeSelect.value = '🏥 Doctor Appointment';
+        prioritySelect.value = '🔴 High';
+    } else if (type === 'vaccination') {
+        titleInput.value = 'Baby Vaccination';
+        typeSelect.value = '💉 Vaccination';
+        prioritySelect.value = '🔴 High';
+    } else if (type === 'vitamins') {
+        titleInput.value = 'Take Prenatal Vitamins';
+        typeSelect.value = '💊 Medication';
+        prioritySelect.value = '🟡 Medium';
+    }
+}
+
+function filterReminders() {
+    const statusFilter = document.getElementById('statusFilter').value;
+    const priorityFilter = document.getElementById('priorityFilter').value;
+    const reminderItems = document.querySelectorAll('.reminder-item');
+    
+    reminderItems.forEach(item => {
+        const itemStatus = item.getAttribute('data-status');
+        const itemPriority = item.getAttribute('data-priority');
+        
+        const statusMatch = statusFilter === 'All' || itemStatus === statusFilter;
+        const priorityMatch = priorityFilter === 'All' || itemPriority === priorityFilter;
+        
+        if (statusMatch && priorityMatch) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function editReminder(id) {
+    alert('Edit functionality would open a form to modify the reminder with ID: ' + id);
+}
+
+function deleteReminder(id) {
+    if (confirm('Are you sure you want to delete this reminder?')) {
+        // This would normally make an AJAX request to delete the reminder
+        alert('Reminder would be deleted (ID: ' + id + ')');
+    }
+}
+
+// Set minimum date to today
+document.querySelector('input[name="reminder_date"]').min = new Date().toISOString().split('T')[0];
+
+// Populate upcoming reminders
+function populateUpcomingReminders() {
+    // This would normally process the reminders data passed from Flask
+    const upcomingContainer = document.getElementById('upcomingReminders');
+    if (upcomingContainer) {
+        // Example upcoming reminder
+        upcomingContainer.innerHTML = '<div class="alert alert-info">📅 Tomorrow: Prenatal Checkup at 10:00</div>';
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    populateUpcomingReminders();
+});
+</script>
+{% endblock %}

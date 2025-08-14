@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}Baby & Pregnancy Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>👶 Baby & Pregnancy Tracker</h1>
+</div>
+
+<div class="text-center mb-3">
+    <button class="btn" id="pregnancyBtn" onclick="showMode('pregnancy')">🤰 Pregnancy</button>
+    <button class="btn" id="babyBtn" onclick="showMode('baby')">👶 Baby Care</button>
+</div>
+
+<div id="pregnancyMode">
+    <div class="card">
+        <h3>🤰 Pregnancy Journey</h3>
+        
+        <div class="form-group">
+            <label>Current pregnancy week: {{ user_data.pregnancy_week }}</label>
+            <input type="range" min="1" max="42" value="{{ user_data.pregnancy_week }}" class="form-control" style="margin-top: 0.5rem;">
+        </div>
+        
+        <div class="grid grid-2">
+            <div>
+                <h4>📏 Baby Development</h4>
+                
+                {% set size_comparisons = {
+                    4: ("Poppy seed", "🌱"), 8: ("Raspberry", "🫐"), 12: ("Lime", "🍋‍🟩"),
+                    16: ("Avocado", "🥑"), 20: ("Banana", "🍌"), 24: ("Corn cob", "🌽"),
+                    28: ("Eggplant", "🍆"), 32: ("Jicama", "🥔"), 36: ("Papaya", "🥭"), 40: ("Watermelon", "🍉")
+                } %}
+                
+                {% set current_size = "Baby" %}
+                {% set current_emoji = "👶" %}
+                {% for week, (size, emoji) in size_comparisons.items() %}
+                    {% if user_data.pregnancy_week >= week %}
+                        {% set current_size = size %}
+                        {% set current_emoji = emoji %}
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="alert alert-success">
+                    {{ current_emoji }} Baby is about the size of a {{ current_size }}!
+                </div>
+                
+                {% set milestones = {
+                    8: "Heart begins to beat", 12: "Reflexes develop", 16: "Can hear sounds",
+                    20: "You might feel kicks", 24: "Lungs develop", 28: "Eyes can open",
+                    32: "Bones harden", 36: "Baby is considered full-term", 40: "Ready for birth"
+                } %}
+                
+                {% set current_milestone = "Growing rapidly" %}
+                {% for week, milestone in milestones.items() %}
+                    {% if user_data.pregnancy_week >= week %}
+                        {% set current_milestone = milestone %}
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="alert alert-info">
+                    🎯 Milestone: {{ current_milestone }}
+                </div>
+            </div>
+            
+            <div>
+                <h4>📋 This Week's To-Do</h4>
+                
+                {% set weekly_tasks = {
+                    (1, 12): ["Take prenatal vitamins", "Schedule first prenatal visit", "Start healthy diet"],
+                    (13, 28): ["Schedule anatomy scan", "Consider prenatal classes", "Plan nursery"],
+                    (29, 36): ["Pack hospital bag", "Install car seat", "Prepare birth plan"],
+                    (37, 42): ["Monitor contractions", "Stay close to hospital", "Rest and prepare"]
+                } %}
+                
+                {% set current_tasks = [] %}
+                {% for week_range, tasks in weekly_tasks.items() %}
+                    {% if week_range[0] <= user_data.pregnancy_week <= week_range[1] %}
+                        {% set current_tasks = tasks %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% for task in current_tasks %}
+                    <label style="display: block; margin-bottom: 0.5rem;">
+                        <input type="checkbox" style="margin-right: 0.5rem;">
+                        {{ task }}
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="babyMode" style="display: none;">
+    <div class="card">
+        <h3>👶 Baby Care Tracker</h3>
+        
+        <div class="form-group">
+            <label>Baby's age: {{ user_data.baby_age_months }} months</label>
+            <input type="range" min="0" max="24" value="{{ user_data.baby_age_months }}" class="form-control" style="margin-top: 0.5rem;">
+        </div>
+        
+        <div class="grid grid-2">
+            <div>
+                <h4>🎯 Developmental Milestones</h4>
+                
+                {% set milestones = {
+                    0: "Sleeps 14-17 hours/day",
+                    1: "Makes eye contact, follows objects",
+                    2: "Begins to smile, holds head up briefly",
+                    3: "Laughs, reaches for objects",
+                    4: "Rolls over, sits with support",
+                    6: "Sits without support, starts solid foods",
+                    9: "Crawls, says 'mama' or 'dada'",
+                    12: "Walks independently, says first words",
+                    18: "Runs, vocabulary of 10-50 words",
+                    24: "Jumps, speaks in 2-word phrases"
+                } %}
+                
+                {% set current_milestone = "Growing and learning" %}
+                {% for age, milestone in milestones.items() %}
+                    {% if user_data.baby_age_months >= age %}
+                        {% set current_milestone = milestone %}
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="alert alert-success">
+                    🎉 Current milestone: {{ current_milestone }}
+                </div>
+                
+                <h4>🍼 Feeding Guidelines</h4>
+                {% if user_data.baby_age_months < 6 %}
+                    <div class="alert alert-info">
+                        🤱 Exclusive breastfeeding recommended<br>
+                        • Feed 8-12 times per day<br>
+                        • On-demand feeding is best
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        🥄 Breastfeeding + solid foods<br>
+                        • 3 meals + 2 snacks<br>
+                        • Continue breastfeeding
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div>
+                <h4>💤 Sleep Patterns</h4>
+                
+                {% set sleep_patterns = {
+                    0: "14-17 hours (2-4 hour stretches)",
+                    3: "14-15 hours (longer night stretches)",
+                    6: "12-14 hours (may sleep through night)",
+                    12: "11-13 hours (1-2 naps per day)",
+                    24: "10-12 hours (1 afternoon nap)"
+                } %}
+                
+                {% set current_sleep = "Varies by individual" %}
+                {% for age, pattern in sleep_patterns.items() %}
+                    {% if user_data.baby_age_months >= age %}
+                        {% set current_sleep = pattern %}
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="alert alert-info">
+                    😴 Expected sleep: {{ current_sleep }}
+                </div>
+                
+                <h4>💉 Vaccination Schedule</h4>
+                {% set vaccines = {
+                    0: "Birth: Hepatitis B",
+                    2: "2 months: DTaP, IPV, Hib, PCV, Rotavirus",
+                    4: "4 months: DTaP, IPV, Hib, PCV, Rotavirus",
+                    6: "6 months: DTaP, IPV, Hib, PCV, Rotavirus, Influenza",
+                    12: "12 months: MMR, Varicella, Hepatitis A"
+                } %}
+                
+                {% for age, vaccine in vaccines.items() %}
+                    {% if user_data.baby_age_months >= age %}
+                        <div class="alert alert-success" style="margin-bottom: 0.5rem; padding: 0.5rem;">
+                            ✅ {{ vaccine }}
+                        </div>
+                    {% elif age <= user_data.baby_age_months + 2 %}
+                        <div class="alert alert-warning" style="margin-bottom: 0.5rem; padding: 0.5rem;">
+                            📅 Upcoming: {{ vaccine }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showMode(mode) {
+    const pregnancyMode = document.getElementById('pregnancyMode');
+    const babyMode = document.getElementById('babyMode');
+    const pregnancyBtn = document.getElementById('pregnancyBtn');
+    const babyBtn = document.getElementById('babyBtn');
+    
+    if (mode === 'pregnancy') {
+        pregnancyMode.style.display = 'block';
+        babyMode.style.display = 'none';
+        pregnancyBtn.classList.add('btn-primary');
+        babyBtn.classList.remove('btn-primary');
+    } else {
+        pregnancyMode.style.display = 'none';
+        babyMode.style.display = 'block';
+        pregnancyBtn.classList.remove('btn-primary');
+        babyBtn.classList.add('btn-primary');
+    }
+}
+
+// Default to pregnancy mode
+showMode('pregnancy');
+</script>
+{% endblock %}

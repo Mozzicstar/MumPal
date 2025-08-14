@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Health Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📊 Daily Health Tracker</h1>
+    <p><em>Monitor your health metrics and mood daily</em></p>
+</div>
+
+<div class="tabs">
+    <button class="tab active" onclick="showTab('log')">📝 Log Today</button>
+    <button class="tab" onclick="showTab('history')">📈 View History</button>
+    <button class="tab" onclick="showTab('goals')">🎯 Health Goals</button>
+</div>
+
+<div id="logTab" class="tab-content active">
+    <div class="card">
+        <h3>📝 Today's Health Log</h3>
+        
+        <form method="POST" action="{{ url_for('log_health') }}">
+            <div class="grid grid-2">
+                <div>
+                    <h4>🌡️ Vital Signs</h4>
+                    
+                    <div class="form-group">
+                        <label>Body Temperature (°C)</label>
+                        <input type="number" name="temperature" class="form-control" min="35.0" max="42.0" step="0.1" value="37.0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Current Weight (kg)</label>
+                        <input type="number" name="weight" class="form-control" min="30.0" max="150.0" step="0.1" value="65.0">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Blood Pressure - Systolic</label>
+                            <input type="number" name="blood_pressure_sys" class="form-control" min="80" max="200" value="120">
+                        </div>
+                        <div class="form-group">
+                            <label>Blood Pressure - Diastolic</label>
+                            <input type="number" name="blood_pressure_dia" class="form-control" min="40" max="120" value="80">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Heart Rate (bpm)</label>
+                        <input type="number" name="heart_rate" class="form-control" min="50" max="200" value="72">
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>😊 Well-being</h4>
+                    
+                    <div class="form-group">
+                        <label>How are you feeling today?</label>
+                        <select name="mood" class="form-control">
+                            <option value="😊 Excellent">😊 Excellent</option>
+                            <option value="🙂 Good">🙂 Good</option>
+                            <option value="😐 Okay">😐 Okay</option>
+                            <option value="😔 Low">😔 Low</option>
+                            <option value="😣 Stressed">😣 Stressed</option>
+                            <option value="😴 Tired">😴 Tired</option>
+                            <option value="😰 Anxious">😰 Anxious</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Energy Level (1-10)</label>
+                        <input type="range" name="energy_level" min="1" max="10" value="5" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Hours of Sleep Last Night</label>
+                        <input type="number" name="sleep_hours" class="form-control" min="0.0" max="24.0" step="0.5" value="8.0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Water Intake (glasses)</label>
+                        <input type="number" name="water_intake" class="form-control" min="0" max="20" value="8">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Additional Notes</label>
+                <textarea name="notes" class="form-control" rows="3" placeholder="Any concerns, symptoms, or observations..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">💾 Save Health Log</button>
+        </form>
+    </div>
+</div>
+
+<div id="historyTab" class="tab-content">
+    <div class="card">
+        <h3>📈 Health History</h3>
+        
+        {% if health_logs %}
+            <h4>📋 Recent Entries</h4>
+            {% for log in health_logs[-5:] %}
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h5>📅 {{ log.date }} at {{ log.time }}</h5>
+                    
+                    <div class="grid grid-3">
+                        <div>
+                            <p><strong>Temperature:</strong> {{ log.temperature }}°C</p>
+                            <p><strong>Weight:</strong> {{ log.weight }} kg</p>
+                        </div>
+                        <div>
+                            <p><strong>Blood Pressure:</strong> {{ log.blood_pressure }}</p>
+                            <p><strong>Heart Rate:</strong> {{ log.heart_rate }} bpm</p>
+                        </div>
+                        <div>
+                            <p><strong>Mood:</strong> {{ log.mood }}</p>
+                            <p><strong>Energy:</strong> {{ log.energy_level }}/10</p>
+                            <p><strong>Sleep:</strong> {{ log.sleep_hours }} hours</p>
+                        </div>
+                    </div>
+                    
+                    {% if log.notes %}
+                        <p><strong>Notes:</strong> {{ log.notes }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">
+                📝 No health logs yet. Start logging your daily health data!
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div id="goalsTab" class="tab-content">
+    <div class="card">
+        <h3>🎯 Health Goals & Recommendations</h3>
+        
+        <div class="grid grid-2">
+            <div>
+                <h4>🎯 Daily Goals</h4>
+                <div style="margin: 1rem 0;">
+                    <p><strong>💧 Hydration Goal</strong><br>
+                    Target: 8-10 glasses of water<br>
+                    Benefits: Supports milk production, prevents dehydration</p>
+                    
+                    <p><strong>😴 Sleep Goal</strong><br>
+                    Target: 7-9 hours per night<br>
+                    Tips: Rest when baby sleeps, create bedtime routine</p>
+                    
+                    <p><strong>🏃‍♀️ Activity Goal</strong><br>
+                    Target: 30 minutes gentle exercise<br>
+                    Options: Walking, prenatal yoga, swimming</p>
+                    
+                    <p><strong>🥗 Nutrition Goal</strong><br>
+                    Target: 5 servings fruits & vegetables<br>
+                    Focus: Variety of colors and nutrients</p>
+                </div>
+            </div>
+            
+            <div>
+                <h4>📊 Healthy Ranges</h4>
+                <div style="margin: 1rem 0;">
+                    <p><strong>🌡️ Normal Temperature</strong><br>
+                    Range: 36.1°C - 37.2°C<br>
+                    Above 38°C: Consult healthcare provider</p>
+                    
+                    <p><strong>💓 Normal Heart Rate</strong><br>
+                    Pregnancy: 60-100 bpm (may be higher)<br>
+                    Postpartum: 60-100 bpm</p>
+                    
+                    <p><strong>🩸 Normal Blood Pressure</strong><br>
+                    Ideal: Less than 120/80 mmHg<br>
+                    High: 140/90 mmHg or higher</p>
+                    
+                    <p><strong>⚖️ Weight Gain (Pregnancy)</strong><br>
+                    Normal BMI: 25-35 lbs total<br>
+                    Underweight: 28-40 lbs<br>
+                    Overweight: 15-25 lbs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showTab(tabName) {
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => content.classList.remove('active'));
+    
+    // Remove active class from all tabs
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Show selected tab content
+    document.getElementById(tabName + 'Tab').classList.add('active');
+    
+    // Add active class to clicked tab
+    event.target.classList.add('active');
+}
+</script>
+{% endblock %}

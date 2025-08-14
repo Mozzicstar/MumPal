@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HelpMumPal - Maternal Health Companion{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>🤱 HelpMumPal</h2>
+            <p><em>Your 24/7 Maternal Health Companion</em></p>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url_for('ai_assistant') }}" class="nav-link"><i class="fas fa-robot"></i> Ask HelpMumPal</a></li>
+            <li><a href="{{ url_for('baby_tracker') }}" class="nav-link"><i class="fas fa-baby"></i> Baby & Pregnancy Tracker</a></li>
+            <li><a href="{{ url_for('nutrition_guide') }}" class="nav-link"><i class="fas fa-utensils"></i> Nutrition Guide</a></li>
+            <li><a href="{{ url_for('health_tracker') }}" class="nav-link"><i class="fas fa-chart-line"></i> Health Tracker</a></li>
+            <li><a href="{{ url_for('reminders') }}" class="nav-link"><i class="fas fa-clock"></i> Smart Reminders</a></li>
+            <li><a href="{{ url_for('emergency_help') }}" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Emergency Help</a></li>
+            <li><a href="{{ url_for('mental_health') }}" class="nav-link"><i class="fas fa-brain"></i> Mental Health Support</a></li>
+            <li><a href="{{ url_for('resources') }}" class="nav-link"><i class="fas fa-book"></i> Health Resources</a></li>
+            <li><a href="{{ url_for('about') }}" class="nav-link"><i class="fas fa-heart"></i> About</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+        
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p><strong>HelpMumPal</strong> - Your 24/7 Maternal Health Companion 💙</p>
+                <p><em>Empowering mothers across Africa with AI-powered health support</em></p>
+                <small>© 2025 HelpMumPal. Built with ❤️ for African mothers.</small>
+            </div>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

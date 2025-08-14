@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}Nutrition & Meal Guide{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🍲 Nutrition & Meal Guide</h1>
+    <p><em>Eat right for your stage — whether pregnant or nursing</em></p>
+</div>
+
+<div class="text-center mb-3">
+    <button class="btn" id="pregnancyNutritionBtn" onclick="showNutritionMode('pregnancy')">🤰 Pregnancy</button>
+    <button class="btn" id="breastfeedingNutritionBtn" onclick="showNutritionMode('breastfeeding')">🤱 Breastfeeding</button>
+    <button class="btn" id="babyNutritionBtn" onclick="showNutritionMode('baby')">👶 Baby Nutrition</button>
+</div>
+
+<div id="pregnancyNutrition">
+    <div class="card">
+        <h3>🤰 Pregnancy Nutrition</h3>
+        
+        <div class="grid grid-2">
+            <div>
+                <h4>✅ Essential Foods</h4>
+                
+                <p><strong>🥬 Leafy Greens</strong><br>
+                Spinach, kale, lettuce<br>
+                Rich in folate and iron<br>
+                Prevents birth defects</p>
+                
+                <p><strong>🥛 Dairy Products</strong><br>
+                Milk, yogurt, cheese<br>
+                Calcium for bone development<br>
+                Protein for growth</p>
+                
+                <p><strong>🥭 Colorful Fruits</strong><br>
+                Oranges, berries, mangoes<br>
+                Vitamin C and fiber<br>
+                Natural sugars for energy</p>
+                
+                <p><strong>🐟 Lean Proteins</strong><br>
+                Fish, chicken, beans, eggs<br>
+                Essential amino acids<br>
+                Omega-3 for brain development</p>
+                
+                <p><strong>🌾 Whole Grains</strong><br>
+                Brown rice, quinoa, oats<br>
+                B vitamins and fiber<br>
+                Sustained energy</p>
+            </div>
+            
+            <div>
+                <h4>⚠️ Foods to Limit/Avoid</h4>
+                
+                <p><strong>🚫 High Mercury Fish</strong><br>
+                Shark, swordfish, king mackerel<br>
+                Can harm baby's nervous system</p>
+                
+                <p><strong>🍷 Alcohol</strong><br>
+                No safe amount during pregnancy<br>
+                Can cause birth defects</p>
+                
+                <p><strong>☕ Excessive Caffeine</strong><br>
+                Limit to 200mg per day<br>
+                About 1 cup of coffee</p>
+                
+                <p><strong>🥩 Undercooked Meat</strong><br>
+                Risk of bacterial infection<br>
+                Always cook thoroughly</p>
+                
+                <p><strong>🧀 Unpasteurized Products</strong><br>
+                Soft cheeses, raw milk<br>
+                Risk of listeria</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="breastfeedingNutrition" style="display: none;">
+    <div class="card">
+        <h3>🤱 Breastfeeding Nutrition</h3>
+        
+        <div class="alert alert-info">
+            💡 You need an extra 300-500 calories per day while breastfeeding
+        </div>
+        
+        <div class="grid grid-2">
+            <div>
+                <h4>💪 Nutrient Boosters</h4>
+                
+                <p><strong>🥑 Healthy Fats</strong><br>
+                Avocados, nuts, olive oil<br>
+                Support baby's brain development</p>
+                
+                <p><strong>🐟 Omega-3 Rich Foods</strong><br>
+                Salmon, sardines, walnuts<br>
+                Crucial for baby's vision and brain</p>
+                
+                <p><strong>🥛 Extra Calcium</strong><br>
+                Dairy, leafy greens, almonds<br>
+                Prevent bone loss</p>
+                
+                <p><strong>💧 Hydration</strong><br>
+                8-10 glasses of water daily<br>
+                Essential for milk production</p>
+                
+                <p><strong>🍖 Iron-Rich Foods</strong><br>
+                Red meat, spinach, lentils<br>
+                Prevent maternal anemia</p>
+            </div>
+            
+            <div>
+                <h4>🎯 Sample Meal Plan</h4>
+                
+                <p><strong>🌅 Breakfast</strong><br>
+                Oatmeal with berries and nuts<br>
+                Greek yogurt<br>
+                Orange juice</p>
+                
+                <p><strong>🌞 Lunch</strong><br>
+                Grilled chicken salad<br>
+                Whole grain bread<br>
+                Water with lemon</p>
+                
+                <p><strong>🌙 Dinner</strong><br>
+                Baked salmon<br>
+                Sweet potato and broccoli<br>
+                Brown rice</p>
+                
+                <p><strong>🍎 Snacks</strong><br>
+                Apple with peanut butter<br>
+                Trail mix<br>
+                Smoothie with spinach</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="babyNutrition" style="display: none;">
+    <div class="card">
+        <h3>👶 Baby Nutrition Guide</h3>
+        
+        <div class="form-group">
+            <label>Baby's age (months): <span id="babyAgeValue">6</span></label>
+            <input type="range" id="babyAgeSlider" min="0" max="24" value="6" class="form-control" onchange="updateBabyAge()">
+        </div>
+        
+        <div id="babyNutritionContent">
+            <!-- Content will be updated by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<script>
+function showNutritionMode(mode) {
+    const pregnancyNutrition = document.getElementById('pregnancyNutrition');
+    const breastfeedingNutrition = document.getElementById('breastfeedingNutrition');
+    const babyNutrition = document.getElementById('babyNutrition');
+    
+    const pregnancyBtn = document.getElementById('pregnancyNutritionBtn');
+    const breastfeedingBtn = document.getElementById('breastfeedingNutritionBtn');
+    const babyBtn = document.getElementById('babyNutritionBtn');
+    
+    // Hide all sections
+    pregnancyNutrition.style.display = 'none';
+    breastfeedingNutrition.style.display = 'none';
+    babyNutrition.style.display = 'none';
+    
+    // Remove active class from all buttons
+    pregnancyBtn.classList.remove('btn-primary');
+    breastfeedingBtn.classList.remove('btn-primary');
+    babyBtn.classList.remove('btn-primary');
+    
+    // Show selected section
+    if (mode === 'pregnancy') {
+        pregnancyNutrition.style.display = 'block';
+        pregnancyBtn.classList.add('btn-primary');
+    } else if (mode === 'breastfeeding') {
+        breastfeedingNutrition.style.display = 'block';
+        breastfeedingBtn.classList.add('btn-primary');
+    } else if (mode === 'baby') {
+        babyNutrition.style.display = 'block';
+        babyBtn.classList.add('btn-primary');
+        updateBabyAge();
+    }
+}
+
+function updateBabyAge() {
+    const slider = document.getElementById('babyAgeSlider');
+    const ageValue = document.getElementById('babyAgeValue');
+    const content = document.getElementById('babyNutritionContent');
+    
+    const age = parseInt(slider.value);
+    ageValue.textContent = age;
+    
+    if (age < 6) {
+        content.innerHTML = `
+            <div class="alert alert-success">
+                <h4>🤱 Exclusive Breastfeeding Period</h4>
+                <ul>
+                    <li>Breast milk provides all necessary nutrients</li>
+                    <li>No water, juice, or solid foods needed</li>
+                    <li>Feed on demand (8-12 times per day)</li>
+                    <li>If formula feeding, follow package instructions</li>
+                </ul>
+            </div>
+        `;
+    } else if (age >= 6 && age < 12) {
+        content.innerHTML = `
+            <div class="alert alert-success">
+                <h4>🥄 Introduction to Solid Foods (6-12 months)</h4>
+            </div>
+            
+            <div class="grid grid-2">
+                <div>
+                    <h4>🥇 First Foods (6+ months)</h4>
+                    <ul>
+                        <li><strong>Single-grain cereals</strong> (rice, oat)</li>
+                        <li><strong>Pureed vegetables</strong> (sweet potato, carrot)</li>
+                        <li><strong>Pureed fruits</strong> (banana, apple, pear)</li>
+                        <li><strong>Introduce one food at a time</strong></li>
+                        <li><strong>Wait 3-5 days between new foods</strong></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>🥈 Progressing Foods (8+ months)</h4>
+                    <ul>
+                        <li><strong>Finger foods</strong> (soft cooked vegetables)</li>
+                        <li><strong>Protein sources</strong> (well-cooked egg, chicken)</li>
+                        <li><strong>Dairy products</strong> (plain yogurt, cheese)</li>
+                        <li><strong>Combination foods</strong> (mixed vegetables)</li>
+                        <li><strong>Different textures</strong> (mashed, small pieces)</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    } else {
+        content.innerHTML = `
+            <div class="alert alert-success">
+                <h4>🍽️ Toddler Nutrition (12+ months)</h4>
+            </div>
+            
+            <h4>🌟 Balanced Diet Components</h4>
+            <ul>
+                <li><strong>🥛 Dairy:</strong> 2-3 servings (milk, cheese, yogurt)</li>
+                <li><strong>🍖 Protein:</strong> 2 servings (meat, fish, eggs, beans)</li>
+                <li><strong>🌾 Grains:</strong> 6 servings (bread, cereal, rice, pasta)</li>
+                <li><strong>🥕 Vegetables:</strong> 3 servings (variety of colors)</li>
+                <li><strong>🍎 Fruits:</strong> 2 servings (fresh, frozen, or dried)</li>
+                <li><strong>💧 Fluids:</strong> Water and milk (limit juice)</li>
+            </ul>
+            
+            <h4>⚠️ Foods to Avoid Until Age 2+</h4>
+            <ul>
+                <li>Honey (botulism risk)</li>
+                <li>Whole nuts (choking hazard)</li>
+                <li>Popcorn (choking hazard)</li>
+                <li>Hard candies</li>
+                <li>Large pieces of food</li>
+            </ul>
+        `;
+    }
+}
+
+// Default to pregnancy mode
+showNutritionMode('pregnancy');
+</script>
+{% endblock %}

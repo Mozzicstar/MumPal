@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}About HelpMumPal{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #FF6B6B, #FF8E53); color: white; border-radius: 15px; margin-bottom: 2rem;">
+    <h2>🤱 Empowering Mothers Across Africa</h2>
+    <p style="font-size: 1.2em;">AI-powered maternal health support designed for African communities</p>
+</div>
+
+<div class="grid grid-2">
+    <div>
+        <div class="card">
+            <h3>🎯 Our Mission</h3>
+            
+            <p><strong>HelpMumPal</strong> is dedicated to improving maternal and child health outcomes across Africa by providing:</p>
+            
+            <p>🤖 <strong>AI-Driven Guidance</strong> - Instant, reliable health information tailored to your needs</p>
+            
+            <p>📱 <strong>Accessible Technology</strong> - Simple, mobile-friendly design that works everywhere</p>
+            
+            <p>🌍 <strong>Community-Centered</strong> - Built with understanding of African cultural contexts</p>
+            
+            <p>👩‍⚕️ <strong>Professional Standards</strong> - Information based on WHO and medical guidelines</p>
+            
+            <p>💙 <strong>Compassionate Care</strong> - Supporting mothers through every stage of their journey</p>
+        </div>
+        
+        <div class="card">
+            <h3>🌟 Key Features</h3>
+            
+            <ul>
+                <li><strong>🤖 AI Health Assistant</strong> - 24/7 answers to maternal health questions</li>
+                <li><strong>📊 Health Tracking</strong> - Monitor vital signs, mood, and wellness</li>
+                <li><strong>👶 Development Tracking</strong> - Pregnancy and baby milestone monitoring</li>
+                <li><strong>⏰ Smart Reminders</strong> - Never miss important appointments</li>
+                <li><strong>🚨 Emergency Support</strong> - Quick access to help when you need it</li>
+                <li><strong>🧠 Mental Health Care</strong> - Resources for emotional well-being</li>
+                <li><strong>🍲 Nutrition Guidance</strong> - Healthy eating for mother and baby</li>
+                <li><strong>📚 Educational Content</strong> - Trusted health information library</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div>
+        <div class="card">
+            <h3>📈 Impact & Vision</h3>
+            
+            <h4>🎯 Our Goals</h4>
+            <ul>
+                <li>Reduce maternal mortality rates across Africa</li>
+                <li>Improve access to quality maternal health information</li>
+                <li>Support mothers in making informed health decisions</li>
+                <li>Bridge healthcare gaps in underserved communities</li>
+                <li>Promote early detection of health complications</li>
+            </ul>
+            
+            <h4>📊 Target Impact</h4>
+            <ul>
+                <li><strong>1 million mothers</strong> supported by 2025</li>
+                <li><strong>500+ communities</strong> reached across Africa</li>
+                <li><strong>24/7 availability</strong> in multiple languages</li>
+                <li><strong>Evidence-based</strong> health recommendations</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h3>🏆 Built For African Mothers</h3>
+            
+            <h4>🌍 Understanding Our Community</h4>
+            <ul>
+                <li><strong>Cultural Sensitivity</strong> - Respects traditional practices while promoting safe health behaviors</li>
+                <li><strong>Language Accessibility</strong> - Designed to be translated into local languages</li>
+                <li><strong>Low-Resource Settings</strong> - Optimized for basic smartphones and limited internet</li>
+                <li><strong>Local Healthcare Integration</strong> - Connects with existing health systems</li>
+            </ul>
+            
+            <h4>👥 Community-Driven Development</h4>
+            <ul>
+                <li>Input from African healthcare professionals</li>
+                <li>Feedback from mothers across different regions</li>
+                <li>Partnership with local health organizations</li>
+                <li>Continuous improvement based on real needs</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>📞 Get In Touch</h3>
+    
+    <div class="grid grid-2">
+        <div>
+            <h4>💌 Contact Information</h4>
+            <ul>
+                <li><strong>Email:</strong> support@helpmumpal.org</li>
+                <li><strong>Phone:</strong> +234-xxx-xxxx-xxx</li>
+                <li><strong>Address:</strong> Lagos, Nigeria</li>
+                <li><strong>Website:</strong> www.helpmumpal.org</li>
+            </ul>
+        </div>
+        
+        <div>
+            <h4>💭 Send Us Feedback</h4>
+            
+            <form onsubmit="sendFeedback(event)">
+                <div class="form-group">
+                    <label>Feedback Type</label>
+                    <select class="form-control" id="feedbackType">
+                        <option>General Feedback</option>
+                        <option>Feature Request</option>
+                        <option>Bug Report</option>
+                        <option>Content Suggestion</option>
+                        <option>Partnership Inquiry</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Your Message</label>
+                    <textarea class="form-control" rows="4" placeholder="Tell us how we can improve HelpMumPal..." id="feedbackMessage"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">📤 Send Feedback</button>
+            </form>
+            
+            <div id="feedbackResult" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>⚖️ Important Disclaimers</h3>
+    
+    <div class="alert alert-warning">
+        <strong>Medical Disclaimer:</strong> HelpMumPal provides health information for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with qualified healthcare providers for medical decisions.
+    </div>
+    
+    <div class="alert alert-info">
+        <strong>Privacy & Data:</strong> We are committed to protecting your privacy. Health data is encrypted and stored securely. We do not share personal information with third parties without explicit consent.
+    </div>
+</div>
+
+<div class="card">
+    <h3>🔄 Version Information</h3>
+    
+    <div class="grid grid-2">
+        <div>
+            <p><strong>Current Version:</strong> 1.0.0 Beta</p>
+            <p><strong>Last Updated:</strong> August 2025</p>
+            <p><strong>Platform:</strong> Flask Web Application</p>
+            <p><strong>Languages:</strong> English (more coming soon)</p>
+        </div>
+        
+        <div>
+            <p><strong>Upcoming Features:</strong></p>
+            <ul>
+                <li>Multi-language support</li>
+                <li>Voice interaction</li>
+                <li>Telemedicine integration</li>
+                <li>Community forums</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+function sendFeedback(event) {
+    event.preventDefault();
+    
+    const feedbackType = document.getElementById('feedbackType').value;
+    const feedbackMessage = document.getElementById('feedbackMessage').value;
+    const resultDiv = document.getElementById('feedbackResult');
+    
+    if (feedbackMessage.trim()) {
+        resultDiv.innerHTML = '<div class="alert alert-success">✅ Thank you! Your feedback has been received and will help us improve HelpMumPal.</div>';
+        
+        // Clear the form
+        document.getElementById('feedbackMessage').value = '';
+    } else {
+        resultDiv.innerHTML = '<div class="alert alert-warning">Please enter your feedback message.</div>';
+    }
+}
+</script>
+{% endblock %}
